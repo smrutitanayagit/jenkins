@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        name = 'smruti'
+    }
+    parameters { 
+        string(name: 'person', defaultValue: 'unknown', description: "who r u")
+        booleanParam(name: 'ismale', defaultValue: true, description: "")
+        choice(name: 'city', choices: ['blr', 'mum', 'del','kol'], description: "")
+    }
+    stages {
+        stage('run a command') {
+            steps {
+                sh '''
+                ls
+                date
+                pwd
+                cal 2027
+                
+                '''
+            }
+        }
+        stage('enviroment variable') {
+            environment {
+               username = 'smr'
+            }
+            steps {
+                sh 'echo "${name}"'
+                sh 'echo "${username}"'
+            }
+        }
+        stage('deploy on test') {
+            steps {
+                echo 'deploy to test'
+                sh 'echo "${name}"'
+                sh 'echo "${person}"'
+            }
+        }
+        stage('continue ?') {
+            input {
+                message "should we continue?"
+                ok "yes we should"
+            }
+        
+            steps {
+                echo 'prod'
+            }
+        }
+        stage('deploy on prod') {
+            steps {
+                echo 'deploy to prod'
+            }
+        }
+    }
+}
